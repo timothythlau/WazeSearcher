@@ -25,10 +25,10 @@ class WazeShareViewModel : ContainerHost<WazeShareState, WazeShareSideEffect>, V
         }
     }
 
-    fun updateUrl(url: String) = intent {
+    fun updateSearchDisplay(url: String) = intent {
         reduce {
             state.copy(
-                url = url,
+                searchDisplayString = url,
             )
         }
     }

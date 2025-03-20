@@ -23,12 +23,12 @@ fun WazeShareScreen(viewModel: WazeShareViewModel) {
                 modifier = Modifier.align(Alignment.Center),
             )
 
-            if (state.url?.isNotEmpty() == true) {
+            if (state.searchDisplayString?.isNotEmpty() == true) {
                 Text(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(start = 16.dp, end = 16.dp, bottom = 64.dp),
-                    text = state.url,
+                    text = state.searchDisplayString,
                     color = Color.White,
                 )
             }

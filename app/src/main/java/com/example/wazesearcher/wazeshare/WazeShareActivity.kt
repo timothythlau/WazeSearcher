@@ -64,7 +64,7 @@ class WazeShareActivity : AppCompatActivity() {
                     urlOrText
                 }
 
-                withContext(Dispatchers.Main) { viewModel.updateUrl(searchedDestination) }
+                withContext(Dispatchers.Main) { viewModel.updateSearchDisplay(searchedDestination) }
 
                 val placeFields = listOf(ADDRESS, NAME, LAT_LNG)
                 val searchRequest = SearchByTextRequest.builder(searchedDestination, placeFields)
