@@ -2,8 +2,6 @@ package com.example.wazesearcher.wazeshare
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +9,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.example.wazesearcher.await
+import com.example.wazesearcher.isValidUrl
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.Place.Field.ADDRESS
-import com.google.android.libraries.places.api.model.Place.Field.ADDRESS_COMPONENTS
 import com.google.android.libraries.places.api.model.Place.Field.LAT_LNG
 import com.google.android.libraries.places.api.model.Place.Field.NAME
 import com.google.android.libraries.places.api.net.PlacesClient
@@ -57,17 +55,18 @@ class WazeShareActivity : AppCompatActivity() {
         }
 
 
-        textData.toString().let { url ->
-            Toast.makeText(this, url, Toast.LENGTH_LONG).show()
-
+        textData.toString().let { urlOrText ->
             lifecycleScope.launch(Dispatchers.IO) {
-                val resolvedUrl = resolveRedirectUrl(url)
-                val searchedDestination = decodeLocationQuery(resolvedUrl)
+                val searchedDestination = if (urlOrText.isValidUrl()) {
+                    val resolvedUrl = resolveRedirectUrl(urlOrText)
+                    decodeLocationQuery(resolvedUrl)
+                } else {
+                    urlOrText
+                }
 
-                withContext(Dispatchers.Main) {
-                    viewModel.updateUrl(searchedDestination) }
+                withContext(Dispatchers.Main) { viewModel.updateUrl(searchedDestination) }
 
-                val placeFields = listOf(ADDRESS, NAME, LAT_LNG, ADDRESS_COMPONENTS)
+                val placeFields = listOf(ADDRESS, NAME, LAT_LNG)
                 val searchRequest = SearchByTextRequest.builder(searchedDestination, placeFields)
                     .setMaxResultCount(1)
                     .build()

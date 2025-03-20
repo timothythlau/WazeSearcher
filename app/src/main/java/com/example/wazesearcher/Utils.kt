@@ -2,6 +2,8 @@ package com.example.wazesearcher
 
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.suspendCancellableCoroutine
+import java.net.MalformedURLException
+import java.net.URL
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -33,5 +35,14 @@ suspend fun <T> Task<T>.await(): T {
                 continuation.resumeWithException(e)
             }
         }
+    }
+}
+
+fun String.isValidUrl(): Boolean {
+    return try {
+        URL(this)
+        true
+    } catch (e: MalformedURLException) {
+        false
     }
 }
